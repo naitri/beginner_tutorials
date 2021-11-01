@@ -4,8 +4,7 @@
 #include <sstream>
 
 /**
- * This tutorial demonstrates simple sending custom messages over the ROS system.
- */
+ * This tutorial demonstrates simple sending custom messages over the ROS system.*/
 int main(int argc, char **argv)
 {
   /**
@@ -71,7 +70,7 @@ int main(int argc, char **argv)
     std_msgs::String msg;
 
     std::stringstream ss;
-    ss << "Naitri Rajyaguru: M.Eng Robotics Student" << count;
+    ss << "Software Development for Robotics Assignment" << count;
     msg.data = ss.str();
 
 
