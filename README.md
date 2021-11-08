@@ -22,20 +22,36 @@ cd ..
 catkin_make
 ```
 ## Run instructions
-
+1. Go to directory
+```
+cd catkin_ws
+```
+2. Source the workspace
+```
+source devel/setup.bash
+```
+3. To run talker and listener nodes
 In terminal 1 
 ```
 roscore
 ```
 Open another terminal 2
 ```
-source ~/catkin_ws/devel/setup.bash
 rosrun beginner_tutorials talker
 ```
 
 Open another terminal 3
 ```
-source ~/catkin_ws/devel/setup.bash
 rosrun beginner_tutorials listener
 ```
 
+4. To run talker and listener nodes using launch file syncronously where you can change rate of publishing
+```
+roslaunch beginner_tutorials beginner_tutorials.launch rate:=5
+```
+
+# Running ROS service
+Use the follwing command to run ros service for changing the string
+```
+rosservice call /update "Homework 10"
+``` 
