@@ -37,14 +37,15 @@
 
 #include <ros/ros.h>
 #include <std_msgs/String.h>
-#include <sstream>
+
 
 /**
  * Import header file of service
  */
- #include <beginner_tutorials/update.h>
+#include <beginner_tutorials/update.h>
+#include <sstream>
 
-std::string message = "Software Development for Robotics";
+extern std::string message = "Software Development for Robotics";
 int default_rate = 10;
 
 /**
@@ -57,26 +58,20 @@ int default_rate = 10;
  * @param response is updated string by service
  * @return bool
  */
-bool msg_modifier(beginner_tutorials::update::Request &request, beginner_tutorials::update::Response &response) {
+bool msg_modifier(beginner_tutorials::update::Request *request,
+  beginner_tutorials::update::Response *response) {
   ROS_INFO_STREAM("Message modification service is called..");
-  if(request.input.empty()) {
+  if (request.input.empty()) {
     ROS_ERROR_STREAM("Invalid empty message..modificationis denied");
-  }
-
-  else {
+  } else {
     ROS_WARN_STREAM("Message will be changed by publisher..");
     message = request.input;
     response.output = message;
 
     ROS_INFO_STREAM("The message is modified to.. " << response.output);
     return true;
-
   }
-  
-
 }
-
-
 int main(int argc, char **argv) {
   /**
    * The ros::init() function needs to see argc and argv so that it can perform
@@ -120,32 +115,25 @@ int main(int argc, char **argv) {
 
   ros::Publisher chatter_pub = n.advertise<std_msgs::String>("chatter", 1000);
 
-  auto serv = n.advertiseService("update",msg_modifier);
+  auto serv = n.advertiseService("update", &msg_modifier);
 
-  int rate;
+  int rate = 0;
   if (argc > 0) {
     ROS_DEBUG_STREAM("The change in rate will be:" << rate);
     rate = atoi(argv[1]);
   }
 
-  
-  if (rate == 0 ) {
+  if (rate == 0) {
     ROS_ERROR_STREAM("Rate cannot be zero");
     ROS_WARN_STREAM("Default rate will be set..");
     rate = default_rate;
-  }
-
-  else if (rate < 0) {
-    ROS_FATAL_STREAM ("Rate cannot be non-negative");
+  } else if (rate < 0) {
+    ROS_FATAL_STREAM("Rate cannot be non-negative");
     ROS_WARN_STREAM("Default rate will be set..");
 
-    rate = default_rate;
-  }
-
-  else {
+    rate = default_rate; } else {
     ROS_INFO_STREAM("Rate is now changed to " << rate);
-    rate = rate;
-  }
+    rate = rate; }
 
 
   ros::Rate loop_rate(rate);
