@@ -23,13 +23,60 @@
  ******************************************************************************/
 
 
+/**
+ * @file talker.cpp
+ * @author Naitri Rajyaguru
+ * @brief publishing simple custom string using service
+ * @version 0.1
+ * @date 2021-11-08
+ * 
+ * @copyright Copyright (c) 2021
+ * 
+ */
+
 
 #include <ros/ros.h>
 #include <std_msgs/String.h>
 #include <sstream>
 
 /**
- * This tutorial demonstrates simple sending custom messages over the ROS system.*/
+ * Import header file of service
+ */
+ #include <beginner_tutorials/update.h>
+
+std::string message = "Software Development for Robotics";
+int default_rate = 10;
+
+/**
+ * This tutorial demonstrates simple sending custom messages over the ROS system.
+ */
+
+/**
+ * @brief Function to call service
+ * @param request is input string to service
+ * @param response is updated string by service
+ * @return bool
+ */
+bool msg_modifier(beginner_tutorials::update::Request &request, beginner_tutorials::update::Response &response) {
+  ROS_INFO_STREAM("Message modification service is called..");
+  if(request.input.empty()) {
+    ROS_ERROR_STREAM("Invalid empty message..modificationis denied");
+  }
+
+  else {
+    ROS_WARN_STREAM("Message will be changed by publisher..");
+    message = request.input;
+    response.output = message;
+
+    ROS_INFO_STREAM("The message is modified to.. " << response.output);
+    return true;
+
+  }
+  
+
+}
+
+
 int main(int argc, char **argv) {
   /**
    * The ros::init() function needs to see argc and argv so that it can perform
@@ -73,9 +120,35 @@ int main(int argc, char **argv) {
 
   ros::Publisher chatter_pub = n.advertise<std_msgs::String>("chatter", 1000);
 
+  auto serv = n.advertiseService("update",msg_modifier);
+
+  int rate;
+  if (argc > 0) {
+    ROS_DEBUG_STREAM("The change in rate will be:" << rate);
+    rate = atoi(argv[1]);
+  }
+
+  
+  if (rate == 0 ) {
+    ROS_ERROR_STREAM("Rate cannot be zero");
+    ROS_WARN_STREAM("Default rate will be set..");
+    rate = default_rate;
+  }
+
+  else if (rate < 0) {
+    ROS_FATAL_STREAM ("Rate cannot be non-negative");
+    ROS_WARN_STREAM("Default rate will be set..");
+
+    rate = default_rate;
+  }
+
+  else {
+    ROS_INFO_STREAM("Rate is now changed to " << rate);
+    rate = rate;
+  }
 
 
-  ros::Rate loop_rate(10);
+  ros::Rate loop_rate(rate);
 
 
   /**
@@ -88,15 +161,11 @@ int main(int argc, char **argv) {
     /**
      * This is a message object. You stuff it with data, and then publish it.
      */
-
     std_msgs::String msg;
-
     std::stringstream ss;
-    ss << "Software Development for Robotics Assignment" << count;
+    ss << message << count;
     msg.data = ss.str();
-
-
-    ROS_INFO("%s", msg.data.c_str());
+    ROS_INFO_STREAM(msg.data.c_str());
 
 
     /**

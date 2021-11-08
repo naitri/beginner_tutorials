@@ -29,7 +29,7 @@
  */
 
 void chatterCallback(const std_msgs::String::ConstPtr& msg) {
-  ROS_INFO("Custom message: [%s]", msg->data.c_str());
+  ROS_INFO_STREAM(msg->data.c_str());
 }
 
 
