@@ -15,7 +15,10 @@ find_package(catkin REQUIRED COMPONENTS
   genmsg
 )
 
-
+add_service_files(
+FILES
+update.srv
+)
 
 ## Generate added messages and services with any dependencies listed here
 generate_messages(
