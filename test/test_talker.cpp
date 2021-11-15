@@ -41,9 +41,9 @@
 #include <beginner_tutorials/update.h>
 
 #include <ros/service_client.h>
-
-#include <sstream>
 #include <gtest/gtest.h>
+#include <sstream>
+
 
 
 std::shared_ptr<ros::NodeHandle> n;
@@ -54,7 +54,8 @@ std::shared_ptr<ros::NodeHandle> n;
  */
 
 TEST(ROSPublisherTest, testServiceClient) {
-    ros::ServiceClient client = n->serviceClient<beginner_tutorials::update>("update");
+    ros::ServiceClient client = n->serviceClient
+    <beginner_tutorials::update>("update");
     bool exists(client.waitForExistence(ros::Duration(1)));
     EXPECT_TRUE(exists);
 
@@ -62,14 +63,11 @@ TEST(ROSPublisherTest, testServiceClient) {
     serv.request.input = "testing_service";
     client.call(serv);
     EXPECT_EQ(serv.response.output, serv.request.input);
-
-
 }
 
 
 int main(int argc,
-         char **argv)
-{
+         char **argv) {
   ros::init(argc, argv, "tests");
   n.reset(new ros::NodeHandle);
   testing::InitGoogleTest(&argc, argv);
