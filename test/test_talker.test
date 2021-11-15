@@ -1,0 +1,7 @@
+<launch>
+  <arg name="rate" default="10" />
+
+    <node name="talker" pkg="beginner_tutorials" type="talker" 
+        output="screen" args="$(arg rate)" />
+    <test test-name="test_talker" pkg="beginner_tutorials" type="test_talker" />
+</launch>
