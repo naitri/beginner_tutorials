@@ -37,7 +37,7 @@
 
 #include <ros/ros.h>
 #include <std_msgs/String.h>
-
+#include <tf/transform_broadcaster.h>
 
 /**
  * Import header file of service
@@ -86,7 +86,12 @@ int main(int argc, char **argv) {
 
   ros::init(argc, argv, "talker");
 
+  // Initialize tf broadcaster
+  tf::TransformBroadcaster br;
+  tf::Transform transform;
 
+  transform.setOrigin(tf::Vector3(0.0, 1.0, 0.0));
+  transform.setRotation(tf::Quaternion(0, 0, 1, 1));
   /**
    * NodeHandle is the main access point to communications with the ROS system.
    * The first NodeHandle constructed will fully initialize this node, and the last
@@ -164,7 +169,10 @@ int main(int argc, char **argv) {
      */
 
     chatter_pub.publish(msg);
-
+    br.sendTransform(tf::StampedTransform(transform,
+                                          ros::Time::now(),
+                                          "world",
+                                          "talk"));
 
     ros::spinOnce();
 
