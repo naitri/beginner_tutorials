@@ -54,4 +54,50 @@ roslaunch beginner_tutorials beginner_tutorials.launch rate:=5
 Use the follwing command to run ros service for changing the string
 ```
 rosservice call /update "Homework 10"
-``` 
+```
+
+# Recording rosbag using launch file
+
+Use the following launch file to start recording topic for 15seconds
+```
+roslaunch beginner_tutorials beginner_tutorials.launch rate:=5 bag_record:=true
+```
+Verify the bag file:
+
+```rosbag info <your bagfile>
+```
+
+Play the rosbag file
+```
+rosbag play record.bag
+```
+
+# Run recorded rosbag file
+
+In one terminal start listener
+```
+source devel/setup.bash
+rosrun beginner_tutorials listener
+```
+In another terminal play recorded bag file
+```
+cd results/
+rosbag play record.bag
+```
+
+#Running tests
+Build the tests
+```
+cd catkin_ws
+catkin_make
+catkin_make run tests
+```
+
+Run the tests
+```
+cd catkin_ws
+rostest beginner_tutorials test_talker.test
+```
+
+
+
